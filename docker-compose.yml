@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  # App Service
+  app:
+    # Configuration for building the docker image for the service
+    build:
+    # Use an image built from the specified dockerfile in the current directory.
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      # Forward the exposed port 8000 on the container to port 8080 on the host machine
+      - "8000:8000"
+    restart: unless-stopped
