@@ -1,0 +1,9 @@
+port: 8000
+
+postgres:
+  PgDriver: postgres
+  PSQLUser: postgres
+  PSQLPassword: 1212
+  PSQLHost: localhost
+  PSQLPort: 5432
+  PSQLDBName: shop
