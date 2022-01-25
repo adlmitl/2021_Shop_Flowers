@@ -3,16 +3,17 @@ package main
 import (
 	"net/http"
 	"os"
+	http2 "shopflowers/src/internal/auth/delivery/http"
+	"shopflowers/src/internal/auth/repository"
+	"shopflowers/src/internal/auth/service"
 	"shopflowers/src/pkg/db/psql"
 	"shopflowers/src/pkg/logg"
 	"shopflowers/src/pkg/util"
 )
 
-var l = logg.NewLogg()
-
 func main() {
 	cfgPath := util.GetConfigPath(os.Getenv("config"))
-
+	l := logg.NewLogg()
 	cfgFile, err := util.LoadConfigFile(cfgPath)
 	if err != nil {
 		l.LogError("LoadConfigFile", err)
@@ -27,19 +28,16 @@ func main() {
 	if err != nil {
 		l.LogError("Postgresql init: %s", err.Error())
 	}
+	repositoryAuth := repository.NewAuthRepository(psqlDB, l)
+	authService := service.NewAuthService(repositoryAuth, l)
+	handlerAuth := http2.NewAuthHandler(authService, l)
+
 	defer psqlDB.Close()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", homePage)
+	handlerAuth.Register(mux)
 
 	if err = http.ListenAndServe(":8000", mux); err != nil {
-		l.LogError("Error start server:", err.Error())
-	}
-}
-
-func homePage(w http.ResponseWriter, r *http.Request) {
-	_, err := w.Write([]byte("Hello Flowers"))
-	if err != nil {
 		l.LogError("Error start server:", err.Error())
 	}
 }

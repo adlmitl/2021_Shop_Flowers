@@ -45,13 +45,13 @@ func (l *Logg) LogInfo(message string) {
 
 // LogInfoWithArgs - Log infof with args.
 func (l *Logg) LogInfoWithArgs(message string, args ...interface{}) {
-	log.Printf("\033[1;34m[I] %s: %v\033[0m", message, args)
-	l.logInfo.Printf(" %s - %v", util.FileWithFuncAndLineNum(), args)
+	log.Printf("\033[1;34m[I] %s: %s\033[0m", message, args)
+	l.logInfo.Printf(" %s - %s", util.FileWithFuncAndLineNum(), args)
 }
 
-// LogError - Log Errorf with args.
+// LogError - Log Error with args.
 func (l *Logg) LogError(message string, args ...interface{}) {
-	log.Printf("%s \033[1;31m[E] %v: %s\033[0m", util.FileWithLineNum(), message, args)
-	l.logError.Printf("%s - %s: %v", util.FileWithFuncAndLineNum(), message, args)
+	log.Printf("%s \033[1;31m[E] %s: %s\033[0m", util.FileWithLineNum(), message, args)
+	l.logError.Printf("%s - %s: %s", util.FileWithFuncAndLineNum(), message, args)
 	os.Exit(1)
 }
