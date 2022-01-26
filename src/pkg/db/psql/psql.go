@@ -13,10 +13,11 @@ const (
 	minCountConn = 5
 )
 
-var l = logg.NewLogg()
-
 // NewPSQLDB - Конфигурация нового пул соединения с БД.
 func NewPSQLDB(c *config.Config) (*pgxpool.Pool, error) {
+	newLogger := logg.NewCommonLogger()
+	newLogger.InitLogger()
+
 	connStr := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable",
 		c.Postgres.PgDriver,
 		c.Postgres.PSQLUser,
@@ -25,13 +26,12 @@ func NewPSQLDB(c *config.Config) (*pgxpool.Pool, error) {
 		c.Postgres.PSQLPort,
 		c.Postgres.PSQLDBName,
 	)
-
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
 	poolConfig, err := pgxpool.ParseConfig(connStr)
 	if err != nil {
-		l.LogError("Error create pool", err.Error())
+		newLogger.Error("pgxpool.ParseConfig", err.Error())
 	}
 
 	poolConfig.MaxConns = maxCountConn
@@ -39,14 +39,14 @@ func NewPSQLDB(c *config.Config) (*pgxpool.Pool, error) {
 
 	pool, err := pgxpool.ConnectConfig(ctx, poolConfig)
 	if err != nil {
-		l.LogError("Error connect to db", err.Error())
+		newLogger.Error("pgxpool.ConnectConfig", err.Error())
 	}
-	l.LogInfo("Connect OK!")
+	newLogger.Info("Connect OK!")
 
 	if err = pool.Ping(ctx); err != nil {
-		l.LogError("Error ping failed", err.Error())
+		newLogger.Error("pool.Ping", err.Error())
 	}
-	l.LogInfo("Success!")
+	newLogger.Info("Success!")
 
 	return pool, nil
 }

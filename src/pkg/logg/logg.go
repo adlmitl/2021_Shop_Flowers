@@ -8,26 +8,61 @@ import (
 
 const pathToLoggFile = "./shopflowers.log"
 
-type Logg struct {
-	logInfo  *log.Logger
-	logError *log.Logger
+// CommonLogger - Общая структура лог файла.
+type CommonLogger struct {
+	logInfo          *log.Logger
+	logError         *log.Logger
+	logErrorResponse *log.Logger
 }
 
-func NewLogg() *Logg {
+// NewCommonLogger - Конструктор CommonLogger.
+func NewCommonLogger() *CommonLogger {
+	return &CommonLogger{}
+}
+
+// InitLogger - Инициализация лог файла.
+func (l *CommonLogger) InitLogger() {
 	file, err := logFile()
 	if err != nil {
 		log.Fatalf("\033[1;31m[E] Error log file not found: %s\033[0m", err.Error())
+		return
 	}
-
-	logInfo := log.New(file, " INFO ---", log.Lmsgprefix|log.LstdFlags)
-	logError := log.New(file, "ERROR --- ", log.Lmsgprefix|log.LstdFlags)
-
-	return &Logg{
-		logInfo:  logInfo,
-		logError: logError,
-	}
+	l.logInfo = log.New(file, " INFO ---", log.Lmsgprefix|log.LstdFlags)
+	l.logError = log.New(file, "ERROR ---", log.Lmsgprefix|log.LstdFlags)
+	l.logErrorResponse = log.New(file, "ERROR_RESPONSE ---", log.Lmsgprefix|log.LstdFlags)
 }
 
+// Info - Логирование информации.
+func (l *CommonLogger) Info(msg string) {
+	log.Printf("\033[1;34m[I] %s \033[0m", msg)
+	l.logInfo.Printf("%s - %s", util.FileWithFuncAndLineNum(), msg)
+}
+
+// InfoWithArg - Логирование информации с аргументом.
+func (l *CommonLogger) InfoWithArg(msg string, arg interface{}) {
+	log.Printf("\033[1;34m[I] %s: %s\033[0m", msg, arg)
+	l.logInfo.Printf("%s - %s: %v", util.FileWithFuncAndLineNum(), msg, arg)
+}
+
+// Error - Логирование ошибок.
+func (l *CommonLogger) Error(msg, err string) {
+	log.Printf("%s \033[1;31m[E] %s: %v\033[0m", util.FileWithLineNum(), msg, err)
+	l.logError.Fatalf("%s - %s: %v", util.FileWithFuncAndLineNum(), msg, err)
+}
+
+// ErrorWithArg - Логирование ошибок с аргументом.
+func (l *CommonLogger) ErrorWithArg(msg string, arg interface{}) {
+	log.Printf("%s \033[1;31m[E] %s: %v\033[0m", util.FileWithLineNum(), msg, arg)
+	l.logError.Fatalf("%s - %s: %v", util.FileWithFuncAndLineNum(), msg, arg)
+}
+
+// ErrorResponse - Логирование статус ответа веб-сервера.
+func (l *CommonLogger) ErrorResponse(msg string, statusCode int, err string) {
+	log.Printf("%s \033[1;31m[E_RESPONSE] %d: %s: %s\033[0m", util.FileWithLineNum(), msg, statusCode, err)
+	l.logError.Fatalf("%s - %s: %d: %s", util.FileWithFuncAndLineNum(), msg, statusCode, err)
+}
+
+// logFile - Лог файл.
 func logFile() (*os.File, error) {
 	file, err := os.OpenFile(pathToLoggFile, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
@@ -35,23 +70,4 @@ func logFile() (*os.File, error) {
 	}
 
 	return file, err
-}
-
-// LogInfo - Log info.
-func (l *Logg) LogInfo(message string) {
-	log.Printf("\033[1;34m[I] %s\033[0m", message)
-	l.logInfo.Printf(" %s - %s", util.FileWithFuncAndLineNum(), message)
-}
-
-// LogInfoWithArgs - Log infof with args.
-func (l *Logg) LogInfoWithArgs(message string, args ...interface{}) {
-	log.Printf("\033[1;34m[I] %s: %s\033[0m", message, args)
-	l.logInfo.Printf(" %s - %s", util.FileWithFuncAndLineNum(), args)
-}
-
-// LogError - Log Error with args.
-func (l *Logg) LogError(message string, args ...interface{}) {
-	log.Printf("%s \033[1;31m[E] %s: %s\033[0m", util.FileWithLineNum(), message, args)
-	l.logError.Printf("%s - %s: %s", util.FileWithFuncAndLineNum(), message, args)
-	os.Exit(1)
 }

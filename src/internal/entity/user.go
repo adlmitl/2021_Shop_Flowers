@@ -11,7 +11,7 @@ type UsersList struct {
 
 // User - сущность.
 type User struct {
-	Id       uuid.UUID `json:"id" db:"id"`
-	Login    string    `json:"login" db:"login"`
-	Password string    `json:"password" db:"password"`
+	Id       uuid.UUID `json:"id"`
+	Login    string    `json:"login"`
+	Password string    `json:"password"`
 }

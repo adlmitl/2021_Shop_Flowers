@@ -1,14 +1,10 @@
 package util
 
 import (
-	"errors"
-	"github.com/spf13/viper"
 	"golang.org/x/text/encoding/charmap"
 	"golang.org/x/text/transform"
 	"io/ioutil"
-	"log"
 	"runtime"
-	"shopflowers/config"
 	"strconv"
 	"strings"
 )
@@ -47,38 +43,4 @@ func FileWithFuncAndLineNum() string {
 	idxFile := strings.LastIndexByte(strconv.Itoa(frame.Line), '/')
 
 	return "[" + frame.Function + "] - " + frame.File[idxFile+1:] + ":" + strconv.FormatInt(int64(frame.Line), 10)
-}
-
-// GetConfigPath - Path to configuration file.
-func GetConfigPath(cfgPath string) string {
-	return "config/config"
-}
-
-func LoadConfigFile(filename string) (*viper.Viper, error) {
-	v := viper.New()
-
-	v.SetConfigName(filename)
-	v.AddConfigPath(".")
-	v.AutomaticEnv()
-	if err := v.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			return nil, errors.New("config file not found")
-		}
-		return nil, err
-	}
-
-	return v, nil
-}
-
-// ParseFileConfig - Parsing configuration file.
-func ParseFileConfig(v *viper.Viper) (*config.Config, error) {
-	var c config.Config
-
-	err := v.Unmarshal(&c)
-	if err != nil {
-		log.Printf("unable to decode into struct, %v", err)
-		return nil, err
-	}
-
-	return &c, nil
 }
