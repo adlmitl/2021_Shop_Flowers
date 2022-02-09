@@ -19,15 +19,6 @@ func NewAuthHandler(authService auth.Service, newLogger *logg.CommonLogger) *Aut
 	return &AuthHandler{authService: authService, newLogger: newLogger}
 }
 
-func (h *AuthHandler) Register(mux *http.ServeMux) {
-	mux.HandleFunc("/all", h.FindAll)
-	mux.HandleFunc("/create", h.Create)
-	mux.HandleFunc("/update", h.Update)
-	mux.HandleFunc("/delete", h.Delete)
-	mux.HandleFunc("/byId", h.GetById)
-	mux.HandleFunc("/byLogin", h.FindByLogin)
-}
-
 func (h *AuthHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 	users, err := h.authService.FindAll(context.TODO())
 	if err != nil {

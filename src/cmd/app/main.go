@@ -38,7 +38,7 @@ func main() {
 	defer psqlDB.Close()
 
 	mux := http.NewServeMux()
-	handlerAuth.Register(mux)
+	handlerAuth.RegisterRoutes(mux)
 
 	// Подключение static (*.html, *.png/jpg *.css файлов, *.js)
 	http.Handle("/web/", http.StripPrefix("/web/",

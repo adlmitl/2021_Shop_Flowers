@@ -14,6 +14,7 @@ type authService struct {
 }
 
 func NewAuthService(authRepo auth.Repository, newLogger *logg.CommonLogger) *authService {
+
 	return &authService{authRepo: authRepo, newLogger: newLogger}
 }
 
