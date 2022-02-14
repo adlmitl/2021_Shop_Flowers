@@ -1,5 +1,7 @@
+# Port for started app.
 port: 8000
 
+# Settings connect DB PSQL.
 postgres:
   PgDriver: postgres
   PSQLUser: postgres

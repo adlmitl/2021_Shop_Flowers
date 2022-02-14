@@ -13,7 +13,7 @@ const (
 	minCountConn = 5
 )
 
-// NewPSQLDB - Конфигурация нового пул соединения с БД.
+// NewPSQLDB - Configuring a new database connection pool.
 func NewPSQLDB(c *config.Config) (*pgxpool.Pool, error) {
 	newLogger := logg.NewCommonLogger()
 	newLogger.InitLogger()

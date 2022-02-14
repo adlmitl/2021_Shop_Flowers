@@ -1,5 +1,6 @@
 package repository
 
+// Queries to db psql.
 const (
 	findAllUsers    = `SELECT id, login, password FROM flower.user;`
 	createUserQuery = `INSERT INTO flower.user(id, login, password) VALUES ($1, $2, $3) RETURNING id;`

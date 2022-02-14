@@ -2,6 +2,7 @@ package http
 
 import "net/http"
 
+// RegisterRoutes - Router handlers.
 func (h *AuthHandler) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/all", h.FindAll)
 	mux.HandleFunc("/create", h.Create)

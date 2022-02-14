@@ -6,7 +6,7 @@ import (
 	"log"
 )
 
-// Config - Конфигурация приложения.
+// Config - Configuration.
 type Config struct {
 	Postgres PSQLConfig
 }
@@ -26,6 +26,7 @@ func GetConfigPath(cfgPath string) string {
 	return "config/config"
 }
 
+// LoadConfigFile - Load configuration file.
 func LoadConfigFile(filename string) (*viper.Viper, error) {
 	v := viper.New()
 

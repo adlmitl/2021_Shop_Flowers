@@ -10,15 +10,18 @@ import (
 	"shopflowers/src/pkg/logg"
 )
 
+// AuthHandler - Authentication handler.
 type AuthHandler struct {
 	authService auth.Service
 	newLogger   *logg.CommonLogger
 }
 
+// NewAuthHandler - Constructor.
 func NewAuthHandler(authService auth.Service, newLogger *logg.CommonLogger) *AuthHandler {
 	return &AuthHandler{authService: authService, newLogger: newLogger}
 }
 
+// FindAll - Find all users.
 func (h *AuthHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 	users, err := h.authService.FindAll(context.TODO())
 	if err != nil {
@@ -31,6 +34,7 @@ func (h *AuthHandler) FindAll(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Create - Create user.
 func (h *AuthHandler) Create(w http.ResponseWriter, r *http.Request) {
 	var us entity.User
 
@@ -51,6 +55,7 @@ func (h *AuthHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Update - Update user data.
 func (h *AuthHandler) Update(w http.ResponseWriter, r *http.Request) {
 	idUser, err := uuid.Parse(r.URL.Query().Get("idUser"))
 	if err != nil {
@@ -80,6 +85,7 @@ func (h *AuthHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Delete - Delete user.
 func (h *AuthHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	idUser, err := uuid.Parse(r.URL.Query().Get("idUser"))
 	if err != nil {
@@ -95,6 +101,7 @@ func (h *AuthHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// GetById - Find user by id.
 func (h *AuthHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	idUser, err := uuid.Parse(r.URL.Query().Get("idUser"))
 	if err != nil {
@@ -102,9 +109,9 @@ func (h *AuthHandler) GetById(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	findUserById, err := h.authService.GetById(context.TODO(), idUser)
+	findUserById, err := h.authService.FindById(context.TODO(), idUser)
 	if err != nil {
-		h.newLogger.ErrorResponse("h.authService.GetById", http.StatusInternalServerError, err.Error())
+		h.newLogger.ErrorResponse("h.authService.FindById", http.StatusInternalServerError, err.Error())
 		return
 	}
 
@@ -115,6 +122,7 @@ func (h *AuthHandler) GetById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// FindByLogin - Find user by login.
 func (h *AuthHandler) FindByLogin(w http.ResponseWriter, r *http.Request) {
 	userLogin := r.URL.Query().Get("login")
 

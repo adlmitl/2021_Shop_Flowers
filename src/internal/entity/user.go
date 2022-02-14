@@ -4,12 +4,12 @@ import (
 	"github.com/google/uuid"
 )
 
-// UsersList - список пользователей.
+// UsersList - List users.
 type UsersList struct {
 	Users []*User
 }
 
-// User - сущность.
+// User - Struct.
 type User struct {
 	Id       uuid.UUID `json:"id"`
 	Login    string    `json:"login"`
