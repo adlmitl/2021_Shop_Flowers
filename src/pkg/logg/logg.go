@@ -41,24 +41,24 @@ func (l *CommonLogger) Info(msg string) {
 // InfoWithArg - Логирование информации с аргументом.
 func (l *CommonLogger) InfoWithArg(msg string, arg interface{}) {
 	log.Printf("\033[1;34m[I] %s: %s\033[0m", msg, arg)
-	l.logInfo.Printf("%s - %s: %v", util.FileWithFuncAndLineNum(), msg, arg)
+	l.logInfo.Printf("%s - %s: %s", util.FileWithFuncAndLineNum(), msg, arg)
 }
 
 // Error - Логирование ошибок.
-func (l *CommonLogger) Error(msg, err string) {
-	log.Printf("%s \033[1;31m[E] %s: %v\033[0m", util.FileWithLineNum(), msg, err)
-	l.logError.Fatalf("%s - %s: %v", util.FileWithFuncAndLineNum(), msg, err)
+func (l *CommonLogger) Error(path, err string) {
+	log.Printf("%s \033[1;31m[E] %s: %s\033[0m", util.FileWithLineNum(), path, err)
+	l.logError.Fatalf("%s - %s: %s", util.FileWithFuncAndLineNum(), path, err)
 }
 
 // ErrorWithArg - Логирование ошибок с аргументом.
 func (l *CommonLogger) ErrorWithArg(msg string, arg interface{}) {
 	log.Printf("%s \033[1;31m[E] %s: %v\033[0m", util.FileWithLineNum(), msg, arg)
-	l.logError.Fatalf("%s - %s: %v", util.FileWithFuncAndLineNum(), msg, arg)
+	l.logError.Fatalf("%s - %s: %s", util.FileWithFuncAndLineNum(), msg, arg)
 }
 
 // ErrorResponse - Логирование статус ответа веб-сервера.
 func (l *CommonLogger) ErrorResponse(msg string, statusCode int, err string) {
-	log.Printf("%s \033[1;31m[E_RESPONSE] %d: %s: %s\033[0m", util.FileWithLineNum(), msg, statusCode, err)
+	log.Printf("%s \033[1;31m[E_RESPONSE] %s: %d: %s\033[0m", util.FileWithLineNum(), msg, statusCode, err)
 	l.logError.Fatalf("%s - %s: %d: %s", util.FileWithFuncAndLineNum(), msg, statusCode, err)
 }
 

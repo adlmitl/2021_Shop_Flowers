@@ -4,9 +4,12 @@ import (
 	"net/http"
 	"os"
 	"shopflowers/config"
-	userHandler "shopflowers/src/internal/auth/delivery/http"
-	"shopflowers/src/internal/auth/repository"
-	"shopflowers/src/internal/auth/service"
+	authUserHandler "shopflowers/src/internal/auth/delivery/http"
+	authRepository "shopflowers/src/internal/auth/repository"
+	authService "shopflowers/src/internal/auth/service"
+	flowerHandler "shopflowers/src/internal/flower/delivery/http"
+	flowerRepository "shopflowers/src/internal/flower/repository"
+	flowerService "shopflowers/src/internal/flower/service"
 	"shopflowers/src/pkg/db/psql"
 	"shopflowers/src/pkg/logg"
 )
@@ -31,14 +34,19 @@ func main() {
 		newLogger.Error("psql.NewPSQLDB", err.Error())
 	}
 
-	repositoryAuth := repository.NewAuthRepository(psqlDB, newLogger)
-	serviceAuth := service.NewAuthService(repositoryAuth, newLogger)
-	handlerAuth := userHandler.NewAuthHandler(serviceAuth, newLogger)
+	repositoryAuth := authRepository.NewAuthRepository(psqlDB, newLogger)
+	serviceAuth := authService.NewAuthService(repositoryAuth, newLogger)
+	handlerAuth := authUserHandler.NewAuthHandler(serviceAuth, newLogger)
+
+	repositoryFlower := flowerRepository.NewFlowerRepository(psqlDB, newLogger)
+	serviceFlower := flowerService.NewFlowerService(repositoryFlower, newLogger)
+	handlerFlower := flowerHandler.NewFlowerHandler(serviceFlower, newLogger)
 
 	defer psqlDB.Close()
 
 	mux := http.NewServeMux()
 	handlerAuth.RegisterRoutes(mux)
+	handlerFlower.RegisterRoutes(mux)
 
 	// Подключение static (*.html, *.png/jpg *.css файлов, *.js)
 	http.Handle("/web/", http.StripPrefix("/web/",
