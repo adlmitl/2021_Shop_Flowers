@@ -12,5 +12,4 @@ type Flower struct {
 	Id    uuid.UUID `json:"id"`
 	Name  string    `json:"name"`
 	Price float64   `json:"price"`
-	//UserFlower User      `json:"userFlower"`
 }

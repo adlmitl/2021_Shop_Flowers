@@ -77,7 +77,6 @@ func (h *FlowerHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Id:    idFlower,
 		Name:  f.Name,
 		Price: f.Price,
-		//UserFlower: entity.User{Id: f.UserFlower.Id},
 	})
 	if err != nil {
 		h.newLogger.ErrorResponse("FlowerHandler.flowerService.Update", http.StatusInternalServerError, err.Error())

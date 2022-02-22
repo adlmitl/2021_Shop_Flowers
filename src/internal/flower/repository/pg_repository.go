@@ -29,7 +29,6 @@ func (r *flowerRepository) Create(ctx context.Context, flower *entity.Flower) (*
 		flower.Id,
 		flower.Name,
 		flower.Price,
-		//flower.UserFlower.Id,
 	).Scan(&f.Id); err != nil {
 		r.newLogger.Error("flowerRepository.Create.Scan", err.Error())
 		return nil, err
@@ -48,12 +47,10 @@ func (r *flowerRepository) Update(ctx context.Context, flower *entity.Flower) (*
 		flower.Id,
 		flower.Name,
 		flower.Price,
-		//flower.UserFlower.Id,
 	).Scan(
 		&f.Id,
 		&f.Name,
 		&f.Price,
-		//&f.UserFlower.Id,
 	); err != nil {
 		r.newLogger.Error("flowerRepository.Update.Scan", err.Error())
 		return nil, err
@@ -84,7 +81,6 @@ func (r *flowerRepository) FindById(ctx context.Context, flowerId uuid.UUID) (*e
 		&f.Id,
 		&f.Name,
 		&f.Price,
-		//&f.UserFlower.Id,
 	); err != nil {
 		r.newLogger.Error("flowerRepository.FindById.db.Scan", err.Error())
 		return nil, err
@@ -100,7 +96,6 @@ func (r *flowerRepository) FindByName(ctx context.Context, flowerName string) (*
 		&f.Id,
 		&f.Name,
 		&f.Price,
-		//&f.UserFlower.Id,
 	); err != nil {
 		r.newLogger.Error("flowerRepository.FindByName.db.Scan", err.Error())
 		return nil, err
@@ -125,7 +120,6 @@ func (r *flowerRepository) FindAll(ctx context.Context) (*entity.FlowerList, err
 			&flower.Id,
 			&flower.Name,
 			&flower.Price,
-			//&flower.UserFlower.Id,
 		); err != nil {
 			r.newLogger.Error("flowerRepository.FindAll.db.Scan", err.Error())
 			return nil, err
