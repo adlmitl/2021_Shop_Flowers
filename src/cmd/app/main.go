@@ -16,7 +16,6 @@ import (
 
 func main() {
 	newLogger := logg.NewCommonLogger()
-	newLogger.InitLogger()
 
 	cfgPath := config.GetConfigPath(os.Getenv("config"))
 	cfgFile, err := config.LoadConfigFile(cfgPath)

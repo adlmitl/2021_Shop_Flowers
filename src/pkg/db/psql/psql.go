@@ -16,7 +16,6 @@ const (
 // NewPSQLDB - Configuring a new database connection pool.
 func NewPSQLDB(c *config.Config) (*pgxpool.Pool, error) {
 	newLogger := logg.NewCommonLogger()
-	newLogger.InitLogger()
 
 	connStr := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable",
 		c.Postgres.PgDriver,

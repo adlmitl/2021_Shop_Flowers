@@ -17,19 +17,19 @@ type CommonLogger struct {
 
 // NewCommonLogger - Конструктор CommonLogger.
 func NewCommonLogger() *CommonLogger {
-	return &CommonLogger{}
-}
-
-// InitLogger - Инициализация лог файла.
-func (l *CommonLogger) InitLogger() {
 	file, err := logFile()
 	if err != nil {
 		log.Fatalf("\033[1;31m[E] Error log file not found: %s\033[0m", err.Error())
-		return
 	}
-	l.logInfo = log.New(file, " INFO ---", log.Lmsgprefix|log.LstdFlags)
-	l.logError = log.New(file, "ERROR ---", log.Lmsgprefix|log.LstdFlags)
-	l.logErrorResponse = log.New(file, "ERROR_RESPONSE ---", log.Lmsgprefix|log.LstdFlags)
+	logInfo := log.New(file, " INFO ---", log.Lmsgprefix|log.LstdFlags)
+	logError := log.New(file, "ERROR ---", log.Lmsgprefix|log.LstdFlags)
+	logErrorResponse := log.New(file, "ERROR_RESPONSE ---", log.Lmsgprefix|log.LstdFlags)
+
+	return &CommonLogger{
+		logInfo:          logInfo,
+		logError:         logError,
+		logErrorResponse: logErrorResponse,
+	}
 }
 
 // Info - Логирование информации.
